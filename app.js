@@ -26,7 +26,7 @@ const BUNDLE_ITEMS = [
   { key: "body-splash", name: "بودي سبلاش", en: "Body Splash", desc: "رشّة أخيرة بتعطي انتعاش فوري، وبتحسّن مظهر البشرة وإشراقتها.", tag: "فيتامين E و B5" },
 ];
 // زيدي الرقم لما تغيري الصور، عشان المتصفحات ما تعرض النسخة القديمة المحفوظة عندها
-const ASSET_VERSION = 5;
+const ASSET_VERSION = 6;
 const imageFor = (itemKey, scent) => `images/${itemKey}-${scent}.svg?v=${ASSET_VERSION}`;
 // ترتيب المنتجات في العرض (الطوال بالنص)
 const STAGE_ORDER = ["body-scrub", "body-splash", "shower-gel", "body-butter"];
@@ -35,6 +35,9 @@ const STAGE_ORDER = ["body-scrub", "body-splash", "shower-gel", "body-butter"];
 const PRODUCTS = {
   bundle: { id: "bundle", name: "بكج ليسينا الكامل", price: 25, coverItem: "body-splash" },
 };
+
+// shared with bottle.js / fx.js
+window.LESINA = { SCENTS, get scent() { return currentScent; } };
 
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -112,8 +115,10 @@ function setScent(scent) {
   $$("[data-scent]").forEach((b) => {
     const on = b.dataset.scent === scent;
     b.setAttribute("aria-selected", on);
-    b.tabIndex = on ? 0 : -1;
+    if (b.classList.contains("tab")) b.tabIndex = on ? 0 : -1;
   });
+  // the 3D bottle (bottle.js) listens for this
+  document.dispatchEvent(new CustomEvent("lesina:scent", { detail: { scent, ...SCENTS[scent] } }));
   $("#scentName").textContent = SCENTS[scent].name;
   $("#scentCaption").textContent = caption(scent);
 
@@ -373,6 +378,8 @@ function init() {
   renderCart();
   $("#year").textContent = new Date().getFullYear();
   startSilk();
+  // fx.js lifts the intro; this only matters if it failed to load
+  setTimeout(() => { document.documentElement.classList.add("is-loaded"); $("#loader")?.classList.add("is-done"); }, 6000);
 
   document.addEventListener("click", (e) => {
     const scentBtn = e.target.closest("[data-scent]");

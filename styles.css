@@ -165,7 +165,7 @@ em { font-style: normal; }
 }
 .hero__inner {
   width: 100%; display: grid; justify-items: center; text-align: center;
-  padding: calc(var(--header-h) + 48px) var(--gutter) 88px;
+  padding: calc(var(--header-h) + 28px) var(--gutter) 72px;
 }
 .hero__kicker {
   display: flex; align-items: center; gap: 16px; direction: ltr;
@@ -182,7 +182,8 @@ em { font-style: normal; }
   display: inline-block; color: var(--ivory);
   background: linear-gradient(180deg, #fff 35%, var(--rose) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.js .hero__word span { animation: rise 1.4s var(--ease-out) both; }
+.js:not(.is-loaded) .hero__word span, .js:not(.is-loaded) .hero__stage img, .js:not(.is-loaded) .hero__foot, .js:not(.is-loaded) .hero__kicker { opacity: 0; }
+.js.is-loaded .hero__word span { animation: rise 1.4s var(--ease-out) both; }
 .js .hero__word span:nth-child(2) { animation-delay: .06s; }
 .js .hero__word span:nth-child(3) { animation-delay: .12s; }
 .js .hero__word span:nth-child(4) { animation-delay: .18s; }
@@ -199,7 +200,7 @@ em { font-style: normal; }
   filter: drop-shadow(0 30px 30px rgba(0, 0, 0, .45));
 }
 .hero__stage img:nth-child(2), .hero__stage img:nth-child(3) { width: clamp(124px, 18vw, 264px); position: relative; z-index: 1; }
-.js .hero__stage img { animation: lift 1.6s var(--ease-out) both; }
+.js.is-loaded .hero__stage img { animation: lift 1.6s var(--ease-out) both; }
 .js .hero__stage img:nth-child(1) { animation-delay: .45s; }
 .js .hero__stage img:nth-child(2) { animation-delay: .55s; }
 .js .hero__stage img:nth-child(3) { animation-delay: .65s; }
@@ -207,7 +208,8 @@ em { font-style: normal; }
 @keyframes lift { from { transform: translateY(60px); opacity: 0; } }
 
 .hero__foot { display: grid; justify-items: center; gap: 26px; margin-top: clamp(20px, 3vw, 36px); }
-.js .hero__foot { animation: fade 1.4s var(--ease-out) .9s both; }
+.js.is-loaded .hero__foot { animation: fade 1.4s var(--ease-out) .9s both; }
+.js.is-loaded .hero__kicker { animation: fade 1.2s var(--ease-out) .1s both; }
 @keyframes fade { from { opacity: 0; transform: translateY(16px); } }
 .hero__lead { font-weight: 200; font-size: clamp(1.35rem, 2.6vw, 2.1rem); line-height: 1.4; }
 .hero__lead em { color: var(--rose); font-weight: 300; }
@@ -484,6 +486,79 @@ em { font-style: normal; }
 .js .reveal { opacity: 0; transform: translateY(36px); transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out); }
 .js .reveal.is-in { opacity: 1; transform: none; }
 
+/* ---------- Intro curtain ---------- */
+.loader {
+  position: fixed; inset: 0; z-index: 250; display: none; place-items: center;
+  background: var(--oxblood); color: var(--ivory);
+  transition: transform 1.15s cubic-bezier(.76, 0, .24, 1);
+}
+.js .loader { display: grid; }
+.loader.is-done { transform: translateY(-100%); }
+.loader__inner { display: grid; justify-items: center; gap: 10px; transition: transform 1.15s cubic-bezier(.76, 0, .24, 1), opacity .7s; }
+.loader.is-done .loader__inner { transform: translateY(30vh); opacity: 0; }
+.loader__word { font-family: var(--serif); font-size: clamp(3.6rem, 10vw, 7rem); line-height: 1; direction: ltr; overflow: hidden; padding: 0 .05em .08em; }
+.loader__word span { display: inline-block; animation: rise 1.2s var(--ease-out) both; }
+.loader__word span:nth-child(2) { animation-delay: .07s; }
+.loader__word span:nth-child(3) { animation-delay: .14s; }
+.loader__word span:nth-child(4) { animation-delay: .21s; }
+.loader__word span:nth-child(5) { animation-delay: .28s; }
+.loader__word span:nth-child(6) { animation-delay: .35s; }
+.loader__sub { font-family: var(--serif); font-size: .7rem; letter-spacing: .8em; margin-right: -.8em; color: var(--rose); animation: fade 1s var(--ease-out) .5s both; }
+.loader__line { width: 180px; height: 1px; margin-top: 22px; background: var(--hair-light); overflow: hidden; direction: ltr; }
+.loader__line i { display: block; height: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+
+/* ---------- 3D bottle stage ---------- */
+.hero__visual { position: relative; width: 100%; display: grid; justify-items: center; }
+.hero { --bottle-h: clamp(380px, 52vh, 620px); }
+/* the visual is exactly as tall as the bottle, with the wordmark centred behind it */
+.hero__bottle { display: none; position: absolute; z-index: 2; left: 50%; top: 0; translate: -50% 0; width: min(520px, 74vw); height: var(--bottle-h); }
+.has-3d .hero__bottle { display: block; }
+.has-3d .hero__stage { display: none; }
+.has-3d .hero__visual { min-height: var(--bottle-h); align-content: center; margin-top: 8px; }
+.has-3d .hero__word { margin-top: 0; }
+.hero__bottle canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+.hero__bottle.is-dragging canvas { cursor: grabbing; }
+.js:not(.is-loaded) .hero__bottle { opacity: 0; }
+.hero__hint { position: absolute; bottom: 2%; left: 50%; translate: -50% 0; font-size: .75rem; letter-spacing: .08em; color: var(--rose); opacity: .75; white-space: nowrap; pointer-events: none; }
+@media (hover: hover) and (pointer: fine) { .hero__hint { display: none; } }
+
+.hero__scents { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px 7px 12px; border-radius: 999px;
+  border: 1px solid var(--hair-light); color: var(--rose); font-family: var(--serif); font-style: italic; font-size: .95rem;
+  transition: background .4s var(--ease), color .4s var(--ease), border-color .4s;
+}
+.chip::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--swatch); box-shadow: 0 0 0 2px rgba(255,255,255,.18); }
+.chip:hover { border-color: var(--rose); }
+.chip[aria-selected="true"] { background: var(--ivory); color: var(--oxblood); border-color: var(--ivory); }
+
+/* ---------- Cursor ---------- */
+.cursor { position: fixed; left: 0; top: 0; z-index: 300; pointer-events: none; width: 0; height: 0; display: none; }
+.has-cursor .cursor { display: block; }
+.cursor::before {
+  content: ""; position: absolute; width: 34px; height: 34px; translate: -50% -50%; border-radius: 50%;
+  border: 1px solid #fff; mix-blend-mode: difference; opacity: 0;
+  transition: width .45s var(--ease-out), height .45s var(--ease-out), background .3s, opacity .3s, border-color .3s;
+}
+.cursor.is-on::before { opacity: 1; }
+.cursor.is-hot::before { width: 64px; height: 64px; background: #fff; }
+.cursor.is-label::before { width: 96px; height: 96px; background: var(--ivory); border-color: var(--ivory); mix-blend-mode: normal; }
+.cursor__label { position: absolute; translate: -50% -50%; font-size: .85rem; color: var(--oxblood); white-space: nowrap; opacity: 0; transition: opacity .3s; }
+.cursor.is-label .cursor__label { opacity: 1; }
+
+/* ---------- Split text ---------- */
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; }
+.w > span { display: inline-block; }
+
+/* ---------- Ritual as a horizontal gallery (desktop, set by fx.js) ---------- */
+.ritual.is-h { height: 100vh; padding: 0; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.ritual.is-h > .wrap { width: 100%; padding-inline: var(--gutter); }
+.ritual.is-h .section-head { margin-bottom: 5vh; }
+.ritual.is-h .ritual__list { display: flex; gap: 7vw; width: 100%; }
+.ritual.is-h .step { flex: none; width: min(1080px, 74vw); grid-template-columns: auto 1fr; gap: 4.5vw; }
+.ritual.is-h .step:nth-child(even) .step__figure { order: 0; }
+.ritual.is-h .step__figure { width: min(54vh, 34vw); }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
   .collection__inner { grid-template-columns: 1fr; }
@@ -510,7 +585,9 @@ em { font-style: normal; }
   .bag-btn__count { position: absolute; top: -2px; left: -10px; min-width: 18px; height: 18px; font-size: .7rem; background: var(--gold); color: var(--oxblood); border: 0; }
   .logo__word { font-size: 1.75rem; }
   .hero { min-height: 0; }
-  .hero__inner { padding: calc(var(--header-h) + 72px) var(--gutter) 104px; }
+  .hero { --bottle-h: clamp(330px, 50vh, 440px); }
+  .hero__bottle { width: 84vw; }
+  .hero__inner { padding: calc(var(--header-h) + 36px) var(--gutter) 88px; }
   .arch { aspect-ratio: 5 / 6; }
   .arch__stage img { width: 26%; }
   .arch__stage img:nth-child(2), .arch__stage img:nth-child(3) { width: 31%; }
