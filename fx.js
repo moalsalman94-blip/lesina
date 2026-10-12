@@ -1,5 +1,5 @@
 /* =========================================================
-   Lesina — motion layer
+   Revira — motion layer
    Intro curtain, smooth scroll, scroll choreography, cursor.
    Everything here is optional: if GSAP/Lenis fail to load,
    the store still works and simply animates less.
@@ -19,7 +19,7 @@
     if (!loader) return root.classList.add("is-loaded");
 
     let seen = false;
-    try { seen = sessionStorage.getItem("lesina_intro") === "1"; } catch { /* storage blocked */ }
+    try { seen = sessionStorage.getItem("revira_intro") === "1"; } catch { /* storage blocked */ }
     const minTime = reduced ? 0 : seen ? 500 : 1900;
     const start = performance.now();
     let pageLoaded = document.readyState === "complete";
@@ -38,7 +38,7 @@
       if (done) return;
       done = true;
       if (bar) bar.style.transform = "scaleX(1)";
-      try { sessionStorage.setItem("lesina_intro", "1"); } catch { /* storage blocked */ }
+      try { sessionStorage.setItem("revira_intro", "1"); } catch { /* storage blocked */ }
       setTimeout(() => {
         loader.classList.add("is-done");
         root.classList.add("is-loaded");
