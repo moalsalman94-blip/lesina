@@ -2,23 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LESINA Cosmetics | ليسينا كوزمتكس</title>
-  <meta name="description" content="LESINA Cosmetics — بكج العناية الكامل: شاور جل، سكرب، بودي سبلاش وزبدة الجسم بسعر 25 دينار فقط.">
-  <meta name="theme-color" content="#2b1622">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesina Cosmetics</title>
+  <meta name="description" content="Lesina Cosmetics — بكج العناية الكامل: شاور جل، سكرب، بودي سبلاش وزبدة الجسم بسعر 25 دينار.">
+  <meta name="theme-color" content="#3a0b18">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="announce">✨ بكج العناية الكامل بـ <strong>25 دينار</strong> فقط — الدفع عند الاستلام ✨</div>
+  <div class="announce">بكج ليسينا الكامل بـ <strong>25 دينار</strong> · توصيل مجاني · الدفع عند الاستلام</div>
 
   <header class="header" id="top">
     <div class="container header__inner">
-      <a href="#top" class="logo" aria-label="LESINA">
-        <span class="logo__word">LESINA</span>
+      <a href="#top" class="logo" aria-label="Lesina Cosmetics">
+        <span class="logo__word">Lesina</span>
         <span class="logo__sub">COSMETICS</span>
       </a>
       <nav class="nav" id="nav">
@@ -40,29 +40,24 @@
   <main>
     <!-- HERO -->
     <section class="hero">
-      <div class="hero__glow"></div>
+      <div class="hero__smoke" aria-hidden="true"></div>
       <div class="container hero__inner">
-        <div class="hero__text reveal">
-          <span class="eyebrow">مجموعة العناية المتكاملة</span>
-          <h1>دلّلي بشرتك<br><em>بلمسة ليسينا</em></h1>
-          <p>أربع منتجات بتكمّل بعض لروتين عناية فاخر من أول الشاور لآخر لمسة عطر. كل اللي بتحتاجيه في بكج واحد.</p>
+        <div class="hero__text">
+          <span class="hero__kicker">Premium Body Care</span>
+          <h1>فخامة العناية<br><em>بجسمك</em></h1>
+          <p>عناية فاخرة بالجسم بمكونات مختارة بعناية، لتجربة دلال كاملة من أول الشاور لآخر رشّة.</p>
           <div class="hero__price">
             <span class="price">25 <small>د.أ</small></span>
-            <span class="hero__note">٤ منتجات في بكج واحد</span>
+            <span class="hero__note">4 منتجات · توصيل مجاني</span>
           </div>
+          <div class="scent-picker scent-picker--dark" data-scent-picker aria-label="اختاري الريحة"></div>
           <div class="hero__cta">
-            <button class="btn btn--primary" data-add="lesina-bundle">أضيفي للسلة</button>
-            <a href="#contents" class="btn btn--ghost">شو جوّا البكج؟</a>
+            <button class="btn btn--light" data-add-current>أضيفي للسلة</button>
+            <a href="#contents" class="btn btn--outline-light">شو جوّا البكج؟</a>
           </div>
         </div>
-        <div class="hero__visual reveal">
-          <div class="orbit">
-            <img src="images/shower-gel.svg" alt="شاور جل" class="orbit__item orbit__item--1">
-            <img src="images/scrub.svg" alt="سكرب" class="orbit__item orbit__item--2">
-            <img src="images/body-splash.svg" alt="بودي سبلاش" class="orbit__item orbit__item--3">
-            <img src="images/body-butter.svg" alt="زبدة الجسم" class="orbit__item orbit__item--4">
-            <div class="orbit__badge"><span>4</span>في 1</div>
-          </div>
+        <div class="hero__visual">
+          <div class="cluster" id="heroCluster"></div>
         </div>
       </div>
     </section>
@@ -70,21 +65,22 @@
     <!-- BUNDLE -->
     <section class="section" id="bundle">
       <div class="container">
-        <div class="section__head reveal">
-          <span class="eyebrow">الأكثر طلباً</span>
+        <div class="section__head">
+          <span class="eyebrow">البكج</span>
           <h2>بكج ليسينا الكامل</h2>
+          <p>اختاري ريحتك المفضلة، والبكج بيجيكِ كامل بنفس الريحة.</p>
         </div>
-        <div class="bundle reveal" id="bundleCard"></div>
+        <div class="bundle" id="bundleCard"></div>
       </div>
     </section>
 
     <!-- CONTENTS -->
-    <section class="section section--soft" id="contents">
+    <section class="section section--blush" id="contents">
       <div class="container">
-        <div class="section__head reveal">
+        <div class="section__head">
           <span class="eyebrow">محتويات البكج</span>
           <h2>روتينك بأربع خطوات</h2>
-          <p>كل منتج إله دوره، ومع بعض بيعطوكِ نعومة وريحة بتدوم.</p>
+          <p>بالترتيب اللي بتستعمليهم فيه، من الشاور لآخر لمسة.</p>
         </div>
         <div class="steps" id="steps"></div>
       </div>
@@ -93,28 +89,28 @@
     <!-- WHY -->
     <section class="section" id="why">
       <div class="container">
-        <div class="section__head reveal">
+        <div class="section__head">
           <span class="eyebrow">ليش ليسينا؟</span>
           <h2>تفاصيل بتفرق</h2>
         </div>
         <div class="features">
-          <div class="feature reveal">
-            <div class="feature__icon">🌸</div>
-            <h3>روائح بتدوم</h3>
-            <p>تركيبات متناسقة بتخلّي ريحتك حلوة طول اليوم.</p>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 6 7.2 6 10.5a6 6 0 0 1-12 0C6 10.2 9 7 12 3Z"/></svg></div>
+            <h3>فيتامين E و B5</h3>
+            <p>تركيبات بتغذّي البشرة وبتحافظ على نعومتها.</p>
           </div>
-          <div class="feature reveal">
-            <div class="feature__icon">💧</div>
-            <h3>ترطيب عميق</h3>
-            <p>زبدة الجسم والشاور جل بيحافظوا على نعومة بشرتك.</p>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14Z"/><path d="M5 19 13 11"/></svg></div>
+            <h3>زبدة الشيا والكاكاو</h3>
+            <p>ترطيب عميق وطويل الأمد بيعزّز مرونة الجلد.</p>
           </div>
-          <div class="feature reveal">
-            <div class="feature__icon">🚚</div>
-            <h3>توصيل لكل المملكة</h3>
-            <p>بنوصلك لباب البيت وين ما كنتِ بالأردن.</p>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></div>
+            <h3>توصيل مجاني</h3>
+            <p>بنوصلك لباب البيت بدون أي رسوم توصيل.</p>
           </div>
-          <div class="feature reveal">
-            <div class="feature__icon">💵</div>
+          <div class="feature">
+            <div class="feature__icon"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>
             <h3>الدفع عند الاستلام</h3>
             <p>اطلبي هلأ وادفعي لما يوصلك الطلب.</p>
           </div>
@@ -124,38 +120,49 @@
 
     <!-- CTA BAND -->
     <section class="band">
-      <div class="container band__inner reveal">
-        <div>
-          <h2>جاهزة تدلّلي حالك؟</h2>
-          <p>البكج الكامل بـ 25 دينار بس.</p>
+      <div class="container">
+        <div class="band__inner">
+          <div>
+            <span class="band__script">Glow with love</span>
+            <h2>جاهزة تدلّلي حالك؟</h2>
+            <p>البكج الكامل بـ 25 دينار مع توصيل مجاني، وهدية حلوة لحدا بتحبيه.</p>
+          </div>
+          <button class="btn btn--light" data-add-current>اطلبي الآن</button>
         </div>
-        <button class="btn btn--light" data-add="lesina-bundle">اطلبي الآن</button>
       </div>
     </section>
 
     <!-- FAQ -->
     <section class="section" id="faq">
       <div class="container container--narrow">
-        <div class="section__head reveal">
+        <div class="section__head">
           <span class="eyebrow">عندك سؤال؟</span>
           <h2>أسئلة شائعة</h2>
         </div>
         <div class="faq">
-          <details class="reveal">
+          <details>
             <summary>شو بيحتوي البكج؟</summary>
-            <p>البكج فيه أربع منتجات: شاور جل، سكرب للجسم، بودي سبلاش، وزبدة الجسم.</p>
+            <p>أربع منتجات: شاور جل، سكرب للجسم، بودي سبلاش، وزبدة الجسم.</p>
           </details>
-          <details class="reveal">
+          <details>
+            <summary>شو الروايح المتوفرة؟</summary>
+            <p>Aster و Lily و Camellia. بتختاري الريحة قبل ما تضيفي البكج للسلة.</p>
+          </details>
+          <details>
             <summary>كيف بدفع؟</summary>
-            <p>الدفع نقداً عند الاستلام، بعد ما يوصلك الطلب.</p>
+            <p>الدفع نقداً عند الاستلام.</p>
           </details>
-          <details class="reveal">
-            <summary>كم بياخد التوصيل؟</summary>
-            <p>بعد ما تبعتي طلبك بنتواصل معك لتأكيد العنوان وموعد التوصيل.</p>
+          <details>
+            <summary>كم سعر التوصيل؟</summary>
+            <p>التوصيل مجاني.</p>
           </details>
-          <details class="reveal">
-            <summary>بقدر أطلب أكثر من بكج؟</summary>
-            <p>أكيد! زيدي الكمية من السلة، وهي فكرة هدية حلوة كمان 🎁</p>
+          <details>
+            <summary>كيف بأكد طلبي؟</summary>
+            <p>بعد ما تعبي معلوماتك، بتبعتي تفاصيل الطلب على واتساب ليسينا، وبنتواصل معك لتأكيد العنوان وموعد التوصيل.</p>
+          </details>
+          <details>
+            <summary>بقدر أطلب أكثر من بكج أو أكثر من ريحة؟</summary>
+            <p>أكيد. كل ريحة بتنضاف بسطر لحالها بالسلة، وبتقدري تغيري الكمية من هناك.</p>
           </details>
         </div>
       </div>
@@ -165,11 +172,15 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div class="logo logo--light">
-        <span class="logo__word">LESINA</span>
+        <span class="logo__word">Lesina</span>
         <span class="logo__sub">COSMETICS</span>
       </div>
-      <p>عناية فاخرة لبشرتك، كل يوم.</p>
-      <small>© <span id="year"></span> LESINA Cosmetics. جميع الحقوق محفوظة.</small>
+      <p>Experience the luxury of premium body care.</p>
+      <div class="footer__links">
+        <a href="https://www.instagram.com/lesinacosmetics/" target="_blank" rel="noopener">Instagram · @lesinacosmetics</a>
+        <a href="https://wa.me/962790335444" target="_blank" rel="noopener">WhatsApp · <span dir="ltr">+962 79 033 5444</span></a>
+      </div>
+      <small>© <span id="year"></span> Lesina Cosmetics</small>
     </div>
   </footer>
 
@@ -195,34 +206,39 @@
       <button class="icon-btn modal__close" id="modalClose" aria-label="إغلاق">✕</button>
       <div id="checkoutView">
         <h3>معلومات التوصيل</h3>
-        <p class="muted">الدفع عند الاستلام 💵</p>
+        <p class="muted">الدفع عند الاستلام</p>
         <form id="checkoutForm" novalidate>
-          <label>الاسم الكامل<input name="name" required autocomplete="name"></label>
-          <label>رقم الهاتف<input name="phone" type="tel" required inputmode="tel" placeholder="07XXXXXXXX" autocomplete="tel"></label>
-          <label>المدينة
-            <select name="city" required>
-              <option value="">اختاري المدينة</option>
-              <option>عمّان</option><option>الزرقاء</option><option>إربد</option><option>العقبة</option>
-              <option>السلط</option><option>مادبا</option><option>جرش</option><option>عجلون</option>
-              <option>المفرق</option><option>الكرك</option><option>الطفيلة</option><option>معان</option>
-            </select>
-          </label>
-          <label>العنوان بالتفصيل<textarea name="address" rows="2" required placeholder="المنطقة، الشارع، رقم البناية"></textarea></label>
-          <label>ملاحظات (اختياري)<textarea name="notes" rows="2"></textarea></label>
+          <label for="f-name">الاسم الكامل</label>
+          <input id="f-name" name="name" required autocomplete="name">
+          <label for="f-phone">رقم الهاتف</label>
+          <input id="f-phone" name="phone" type="tel" required inputmode="tel" placeholder="07XXXXXXXX" autocomplete="tel" dir="ltr">
+          <label for="f-city">المدينة</label>
+          <select id="f-city" name="city" required>
+            <option value="">اختاري المدينة</option>
+            <option>عمّان</option><option>الزرقاء</option><option>إربد</option><option>العقبة</option>
+            <option>السلط</option><option>مادبا</option><option>جرش</option><option>عجلون</option>
+            <option>المفرق</option><option>الكرك</option><option>الطفيلة</option><option>معان</option>
+          </select>
+          <label for="f-address">العنوان بالتفصيل</label>
+          <textarea id="f-address" name="address" rows="2" required placeholder="المنطقة، الشارع، رقم البناية"></textarea>
+          <label for="f-notes">ملاحظات (اختياري)</label>
+          <textarea id="f-notes" name="notes" rows="2"></textarea>
           <div class="summary" id="orderSummary"></div>
-          <button class="btn btn--primary btn--block" type="submit">تأكيد الطلب</button>
+          <button class="btn btn--primary btn--block" type="submit">متابعة</button>
         </form>
       </div>
       <div id="successView" hidden>
         <div class="success__icon">✓</div>
-        <h3>تم استلام طلبك!</h3>
-        <p class="muted">شكراً إلك 🌸 رح نتواصل معك قريباً لتأكيد الطلب.</p>
-        <button class="btn btn--primary btn--block" id="successClose">تمام</button>
+        <h3>خطوة أخيرة</h3>
+        <p class="muted">اكبسي الزر لتبعتي تفاصيل طلبك على واتساب ليسينا، وبنتواصل معك لتأكيد التوصيل.</p>
+        <a class="btn btn--whatsapp btn--block" id="whatsappLink" href="#" target="_blank" rel="noopener">ابعتي الطلب على واتساب</a>
+        <p class="muted small">أو تواصلي معنا على الرقم <span dir="ltr">+962 79 033 5444</span></p>
+        <button class="btn btn--ghost btn--block" id="successClose">رجوع للمتجر</button>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status"></div>
 
   <script src="app.js"></script>
 </body>
