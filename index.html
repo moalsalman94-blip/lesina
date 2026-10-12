@@ -13,14 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
   <script>document.documentElement.classList.add("js");</script>
-  <script type="importmap">
-    { "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-    } }
-  </script>
 </head>
 <body>
 
@@ -76,24 +70,12 @@
       <div class="grain" aria-hidden="true"></div>
       <div class="hero__inner">
         <p class="hero__kicker"><span>Premium Body Care</span><i></i><span>Collection</span></p>
-        <div class="hero__visual">
-          <h1 class="hero__word" aria-label="Lesina"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></h1>
-          <div class="hero__bottle" data-cursor="حرّكي">
-            <canvas id="bottle" aria-label="عبوة ليسينا ثلاثية الأبعاد، اسحبي لتدويرها"></canvas>
-            <span class="hero__hint" aria-hidden="true">اسحبي لتدوير العبوة</span>
-          </div>
-          <div class="hero__stage" id="heroStage"></div>
-        </div>
+        <h1 class="hero__word" aria-label="Lesina"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></h1>
         <div class="hero__foot">
           <p class="hero__lead">روتين العناية الكامل، <em>بأربع خطوات.</em></p>
           <div class="hero__cta">
             <a href="#collection" class="btn btn--ivory" data-magnetic>اكتشفي البكج</a>
             <span class="hero__price"><b>25</b> د.أ</span>
-          </div>
-          <div class="hero__scents" role="group" aria-label="اختاري الريحة" dir="ltr">
-            <button type="button" class="chip" data-scent="aster" aria-selected="true" style="--swatch:#b51f3e">Aster</button>
-            <button type="button" class="chip" data-scent="lily" aria-selected="false" style="--swatch:#c99a3b">Lily</button>
-            <button type="button" class="chip" data-scent="camellia" aria-selected="false" style="--swatch:#5f7a2c">Camellia</button>
           </div>
         </div>
       </div>
@@ -340,11 +322,10 @@
 
   <div class="toast" id="toast" role="status"></div>
 
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
-  <script src="fx.js?v=6" defer></script>
-  <script type="module" src="bottle.js?v=6"></script>
+  <script src="fx.js?v=7" defer></script>
 </body>
 </html>

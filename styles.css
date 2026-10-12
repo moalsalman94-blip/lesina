@@ -181,15 +181,15 @@ em { font-style: normal; }
 .hero__kicker i { width: 40px; height: 1px; background: var(--gold); }
 .hero__word {
   direction: ltr; font-family: var(--serif); font-weight: 400;
-  font-size: clamp(5.4rem, 21vw, 18.5rem); line-height: .82; letter-spacing: -.035em;
-  margin-top: clamp(16px, 2.4vw, 32px);
+  font-size: clamp(5.6rem, 24vw, 21rem); line-height: .82; letter-spacing: -.035em;
+  margin-block: clamp(20px, 3vw, 40px) clamp(8px, 1.5vw, 20px);
 }
 /* gradient lives on each letter: a parent's text clip doesn't reach animated children */
 .hero__word span {
   display: inline-block; color: var(--ivory);
   background: linear-gradient(180deg, #fff 35%, var(--rose) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-.js:not(.is-loaded) .hero__word span, .js:not(.is-loaded) .hero__stage img, .js:not(.is-loaded) .hero__foot, .js:not(.is-loaded) .hero__kicker { opacity: 0; }
+.js:not(.is-loaded) .hero__word span, .js:not(.is-loaded) .hero__foot, .js:not(.is-loaded) .hero__kicker { opacity: 0; }
 .js.is-loaded .hero__word span { animation: rise 1.4s var(--ease-out) both; }
 .js .hero__word span:nth-child(2) { animation-delay: .06s; }
 .js .hero__word span:nth-child(3) { animation-delay: .12s; }
@@ -197,22 +197,6 @@ em { font-style: normal; }
 .js .hero__word span:nth-child(5) { animation-delay: .24s; }
 .js .hero__word span:nth-child(6) { animation-delay: .30s; }
 @keyframes rise { from { transform: translateY(45%); opacity: 0; filter: blur(8px); } }
-
-.hero__stage {
-  position: relative; z-index: 2; display: flex; justify-content: center; align-items: flex-end;
-  margin-top: clamp(-150px, -9vw, -40px); direction: ltr;
-}
-.hero__stage img {
-  width: clamp(104px, 15vw, 220px); margin-inline: clamp(-34px, -2.4vw, -12px);
-  filter: drop-shadow(0 30px 30px rgba(0, 0, 0, .45));
-}
-.hero__stage img:nth-child(2), .hero__stage img:nth-child(3) { width: clamp(124px, 18vw, 264px); position: relative; z-index: 1; }
-.js.is-loaded .hero__stage img { animation: lift 1.6s var(--ease-out) both; }
-.js .hero__stage img:nth-child(1) { animation-delay: .45s; }
-.js .hero__stage img:nth-child(2) { animation-delay: .55s; }
-.js .hero__stage img:nth-child(3) { animation-delay: .65s; }
-.js .hero__stage img:nth-child(4) { animation-delay: .75s; }
-@keyframes lift { from { transform: translateY(60px); opacity: 0; } }
 
 .hero__foot { display: grid; justify-items: center; gap: 26px; margin-top: clamp(20px, 3vw, 36px); }
 .js.is-loaded .hero__foot { animation: fade 1.4s var(--ease-out) .9s both; }
@@ -514,31 +498,6 @@ em { font-style: normal; }
 .loader__line { width: 180px; height: 1px; margin-top: 22px; background: var(--hair-light); overflow: hidden; direction: ltr; }
 .loader__line i { display: block; height: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
 
-/* ---------- 3D bottle stage ---------- */
-.hero__visual { position: relative; width: 100%; display: grid; justify-items: center; }
-.hero { --bottle-h: clamp(380px, 52vh, 620px); }
-/* the visual is exactly as tall as the bottle, with the wordmark centred behind it */
-.hero__bottle { display: none; position: absolute; z-index: 2; left: 50%; top: 0; translate: -50% 0; width: min(520px, 74vw); height: var(--bottle-h); }
-.has-3d .hero__bottle { display: block; }
-.has-3d .hero__stage { display: none; }
-.has-3d .hero__visual { min-height: var(--bottle-h); align-content: center; margin-top: 8px; }
-.has-3d .hero__word { margin-top: 0; }
-.hero__bottle canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
-.hero__bottle.is-dragging canvas { cursor: grabbing; }
-.js:not(.is-loaded) .hero__bottle { opacity: 0; }
-.hero__hint { position: absolute; bottom: 2%; left: 50%; translate: -50% 0; font-size: .75rem; letter-spacing: .08em; color: var(--rose); opacity: .75; white-space: nowrap; pointer-events: none; }
-@media (hover: hover) and (pointer: fine) { .hero__hint { display: none; } }
-
-.hero__scents { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.chip {
-  display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px 7px 12px; border-radius: 999px;
-  border: 1px solid var(--hair-light); color: var(--rose); font-family: var(--serif); font-style: italic; font-size: .95rem;
-  transition: background .4s var(--ease), color .4s var(--ease), border-color .4s;
-}
-.chip::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--swatch); box-shadow: 0 0 0 2px rgba(255,255,255,.18); }
-.chip:hover { border-color: var(--rose); }
-.chip[aria-selected="true"] { background: var(--ivory); color: var(--oxblood); border-color: var(--ivory); }
-
 /* ---------- Cursor ---------- */
 .cursor { position: fixed; left: 0; top: 0; z-index: 300; pointer-events: none; width: 0; height: 0; display: none; }
 .has-cursor .cursor { display: block; }
@@ -591,9 +550,7 @@ em { font-style: normal; }
   .bag-btn { position: relative; }
   .bag-btn__count { position: absolute; top: -2px; left: -10px; min-width: 18px; height: 18px; font-size: .7rem; background: var(--gold); color: var(--oxblood); border: 0; }
   .logo__word { font-size: 1.75rem; }
-  .hero { min-height: 0; }
-  .hero { --bottle-h: clamp(330px, 50vh, 440px); }
-  .hero__bottle { width: 84vw; }
+  .hero { min-height: 82svh; }
   .hero__inner { padding: calc(var(--topbar-h) + var(--header-h) + 36px) var(--gutter) 88px; }
   .topbar__track { font-size: .8rem; }
   .arch { aspect-ratio: 5 / 6; }

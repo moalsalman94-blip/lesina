@@ -22,13 +22,13 @@
     try { seen = sessionStorage.getItem("lesina_intro") === "1"; } catch { /* storage blocked */ }
     const minTime = reduced ? 0 : seen ? 500 : 1900;
     const start = performance.now();
-    let ready3d = false, pageLoaded = document.readyState === "complete";
+    let pageLoaded = document.readyState === "complete";
     let done = false;
 
     const tick = () => {
       if (done) return;
       const t = Math.min(1, (performance.now() - start) / Math.max(minTime, 1));
-      const target = (pageLoaded ? 0.5 : 0.25) + (ready3d ? 0.5 : 0.2);
+      const target = pageLoaded ? 1 : 0.6;
       if (bar) bar.style.transform = `scaleX(${Math.min(t, target)})`;
       requestAnimationFrame(tick);
     };
@@ -47,13 +47,12 @@
     };
     const maybeFinish = () => {
       const wait = Math.max(0, minTime - (performance.now() - start));
-      if (pageLoaded && (ready3d || !root.classList.contains("js"))) setTimeout(finish, wait);
+      if (pageLoaded) setTimeout(finish, wait);
     };
 
-    document.addEventListener("lesina:3d-ready", () => { ready3d = true; maybeFinish(); });
     addEventListener("load", () => { pageLoaded = true; maybeFinish(); });
-    // never hold the page hostage: 3D is a bonus
-    setTimeout(() => { pageLoaded = true; ready3d = true; finish(); }, seen ? 2500 : 4200);
+    // never hold the page hostage on a slow connection
+    setTimeout(() => { pageLoaded = true; finish(); }, seen ? 2500 : 4200);
     maybeFinish();
   }
   runLoader();
