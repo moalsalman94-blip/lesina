@@ -228,6 +228,8 @@ em { font-style: italic; }
 .set__price { display: flex; align-items: baseline; gap: 8px; }
 .set__price b { font-family: var(--serif); font-weight: 400; font-size: 3.2rem; line-height: 1; font-variant-numeric: lining-nums; }
 .set__price span { font-size: .78rem; letter-spacing: .14em; color: var(--muted); }
+.set__price s { font-family: var(--serif); font-size: 1.5rem; color: var(--muted); text-decoration-thickness: 1px; margin-right: 6px; }
+.set__badge { margin-left: 4px; padding: 4px 10px; border-radius: 999px; background: var(--gold); color: var(--forest); letter-spacing: .14em; }
 
 /* ---------- Ritual ---------- */
 .ritual { padding: clamp(96px, 12vw, 160px) 0; }

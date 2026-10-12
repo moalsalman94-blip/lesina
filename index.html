@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=11">
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -33,6 +33,7 @@
       <p class="is-active"><i aria-hidden="true">✦</i>Nourish · Strengthen · Shine<i aria-hidden="true">✦</i></p>
       <p><i aria-hidden="true">✦</i>Inspired by nature, made for your hair<i aria-hidden="true">✦</i></p>
       <p><i aria-hidden="true">✦</i>For all hair types<i aria-hidden="true">✦</i></p>
+      <p><i aria-hidden="true">✦</i>The complete ritual: 45 JD instead of 57<i aria-hidden="true">✦</i></p>
     </div>
   </div>
 
@@ -123,13 +124,13 @@
         <div class="products" id="products"></div>
         <div class="set reveal">
           <div class="set__text">
-            <p class="label">The complete ritual</p>
+            <p class="label">The complete ritual <span class="set__badge" id="setSave">Save 12 JD</span></p>
             <h3>All four, one routine</h3>
-            <p>Shampoo, conditioner, hair mask and hair oil, everything your hair needs from wash to finish.</p>
+            <p>Shampoo, conditioner, hair mask and hair oil, everything your hair needs from wash to finish, at a set price.</p>
           </div>
           <div class="set__buy">
-            <p class="set__price"><b id="setPrice">57</b><span>JD</span></p>
-            <button class="btn btn--forest" id="addSet" data-magnetic>Add all four to bag</button>
+            <p class="set__price"><s id="setWas">57 JD</s><b id="setPrice">45</b><span>JD</span></p>
+            <button class="btn btn--forest" id="addSet" data-magnetic>Add the set to bag</button>
           </div>
         </div>
       </div>
@@ -333,7 +334,7 @@
 
   <div class="toast" id="toast" role="status"></div>
 
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>

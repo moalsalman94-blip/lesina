@@ -12,7 +12,7 @@ const CONFIG = {
 };
 
 // Bump when images change so browsers fetch the new files
-const ASSET_VERSION = 10;
+const ASSET_VERSION = 11;
 const asset = (path) => `${path}?v=${ASSET_VERSION}`;
 
 // In ritual order: cleanse → condition → treat → finish
@@ -72,6 +72,15 @@ const PRODUCTS = {
 };
 const ORDER = Object.keys(PRODUCTS);
 
+// The four products together at a set price
+const SET = {
+  id: "ritual-set", name: "The Complete Ritual", size: "Shampoo, Conditioner, Hair Mask, Hair Oil",
+  price: 45, image: "img/lineup-wide.webp",
+};
+// Everything that can sit in the bag
+const CATALOG = { ...PRODUCTS, [SET.id]: SET };
+const BAG_ORDER = [...ORDER, SET.id];
+
 const RITUAL_COPY = {
   shampoo: "Massage into wet hair and scalp, then rinse. A gentle, plant-based lather that cleans without stripping natural oils.",
   conditioner: "Smooth through the lengths and ends, leave for a moment, then rinse. Detangles and seals in moisture.",
@@ -97,7 +106,7 @@ const money = (n) => `${Number(n.toFixed(2))} ${CONFIG.currency}`;
 const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const pad = (n) => String(n).padStart(2, "0");
-const setTotal = () => ORDER.reduce((sum, id) => sum + PRODUCTS[id].price, 0);
+const setFullPrice = () => ORDER.reduce((sum, id) => sum + PRODUCTS[id].price, 0);
 
 /* ---------- Bag state ---------- */
 const STORAGE_KEY = "revira_bag_v1";
@@ -106,7 +115,7 @@ let cart = loadCart();
 function loadCart() {
   try {
     const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    return Object.fromEntries(Object.entries(data).filter(([id, q]) => PRODUCTS[id] && Number.isInteger(q) && q > 0));
+    return Object.fromEntries(Object.entries(data).filter(([id, q]) => CATALOG[id] && Number.isInteger(q) && q > 0));
   } catch {
     return {};
   }
@@ -116,17 +125,17 @@ function saveCart() {
 }
 
 const cartCount = () => Object.values(cart).reduce((a, b) => a + b, 0);
-const cartSubtotal = () => Object.entries(cart).reduce((sum, [id, q]) => sum + PRODUCTS[id].price * q, 0);
+const cartSubtotal = () => Object.entries(cart).reduce((sum, [id, q]) => sum + CATALOG[id].price * q, 0);
 const cartTotal = () => cartSubtotal() + (CONFIG.deliveryFee || 0);
 
 function addToCart(id, qty = 1, { quiet = false } = {}) {
-  if (!PRODUCTS[id]) return;
+  if (!CATALOG[id]) return;
   cart[id] = Math.min(20, (cart[id] || 0) + qty);
   saveCart();
   renderCart();
   const btn = $("#cartOpen");
   btn.classList.remove("bump"); void btn.offsetWidth; btn.classList.add("bump");
-  if (!quiet) toast(`${PRODUCTS[id].name} added to your bag`);
+  if (!quiet) toast(`${CATALOG[id].name} added to your bag`);
 }
 function setQty(id, qty) {
   if (qty <= 0) delete cart[id];
@@ -159,7 +168,9 @@ function renderProducts() {
         </div>
       </article>`;
   }).join("");
-  $("#setPrice").textContent = setTotal();
+  $("#setPrice").textContent = SET.price;
+  $("#setWas").textContent = `${setFullPrice()} ${CONFIG.currency}`;
+  $("#setSave").textContent = `Save ${setFullPrice() - SET.price} ${CONFIG.currency}`;
 }
 
 function renderRitual() {
@@ -201,7 +212,7 @@ function renderCart() {
   const count = cartCount();
   $("#cartCount").textContent = count;
   $("#drawerCount").textContent = count ? `(${count})` : "";
-  const ids = ORDER.filter((id) => cart[id]);
+  const ids = BAG_ORDER.filter((id) => cart[id]);
   const body = $("#cartItems");
 
   if (!ids.length) {
@@ -217,7 +228,7 @@ function renderCart() {
 
   $("#cartFoot").hidden = false;
   body.innerHTML = ids.map((id) => {
-    const p = PRODUCTS[id];
+    const p = CATALOG[id];
     return `
       <div class="cart-item" data-key="${id}">
         <div class="cart-item__img"><img src="${asset(p.image)}" alt=""></div>
@@ -240,8 +251,8 @@ function renderCart() {
 }
 
 function renderSummary() {
-  const lines = ORDER.filter((id) => cart[id]).map((id) =>
-    `<div class="row"><span>${escapeHTML(PRODUCTS[id].name)} × ${cart[id]}</span><span>${money(PRODUCTS[id].price * cart[id])}</span></div>`
+  const lines = BAG_ORDER.filter((id) => cart[id]).map((id) =>
+    `<div class="row"><span>${escapeHTML(CATALOG[id].name)} × ${cart[id]}</span><span>${money(CATALOG[id].price * cart[id])}</span></div>`
   ).join("");
   $("#orderSummary").innerHTML = `${lines}
     <div class="row total"><span>Total</span><span>${money(cartTotal())}</span></div>`;
@@ -321,7 +332,7 @@ function handleCheckout(e) {
   });
   if (!valid) { toast("Please fill in the highlighted fields. Phone format: 07XXXXXXXX"); return; }
 
-  const lines = ORDER.filter((id) => cart[id]).map((id) => `• ${PRODUCTS[id].name} (${PRODUCTS[id].size}) × ${cart[id]} = ${money(PRODUCTS[id].price * cart[id])}`);
+  const lines = BAG_ORDER.filter((id) => cart[id]).map((id) => `• ${CATALOG[id].name} (${CATALOG[id].size}) × ${cart[id]} = ${money(CATALOG[id].price * cart[id])}`);
   const message = [
     "New order from the Revira website",
     "",
@@ -434,8 +445,8 @@ function init() {
   });
 
   $("#addSet").addEventListener("click", () => {
-    ORDER.forEach((id) => addToCart(id, 1, { quiet: true }));
-    toast("The complete ritual is in your bag");
+    addToCart(SET.id, 1, { quiet: true });
+    toast(`The Complete Ritual is in your bag: ${SET.price} ${CONFIG.currency}`);
     openCart();
   });
 
