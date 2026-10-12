@@ -27,6 +27,7 @@
 
   --gutter: clamp(16px, 4vw, 48px);
   --header-h: 76px;
+  --topbar-h: 40px;
   --ease: cubic-bezier(.22, .8, .2, 1);
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   color-scheme: light;
@@ -92,14 +93,20 @@ em { font-style: normal; }
 .btn--block { width: 100%; }
 
 /* ---------- Top bar + header ---------- */
+/* sits over the hero: no band of its own, just a hairline and one message at a time */
 .topbar {
-  position: relative; z-index: 60;
-  display: flex; align-items: center; justify-content: center; gap: 14px;
-  min-height: 36px; padding: 6px var(--gutter);
-  background: var(--oxblood); color: var(--rose); font-size: .78rem; letter-spacing: .08em;
-  border-bottom: 1px solid var(--hair-light);
+  position: relative; z-index: 60; height: var(--topbar-h); padding-inline: var(--gutter);
+  display: grid; place-items: center; color: var(--ivory);
 }
-.topbar__dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); }
+.topbar::after { content: ""; position: absolute; bottom: 0; left: var(--gutter); right: var(--gutter); height: 1px; background: var(--hair-light); }
+.topbar__track { position: relative; width: 100%; height: 1.6em; font-size: .84rem; letter-spacing: .06em; }
+.topbar__track p {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 14px; white-space: nowrap;
+  opacity: 0; transform: translateY(70%); transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.topbar__track p.is-active { opacity: .92; transform: none; }
+.topbar__track p.is-leaving { opacity: 0; transform: translateY(-70%); }
+.topbar__track i { font-style: normal; font-size: .6rem; color: var(--gold); }
 
 .header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
@@ -153,7 +160,7 @@ em { font-style: normal; }
 /* ---------- Hero ---------- */
 .hero {
   position: relative; overflow: hidden; isolation: isolate;
-  margin-top: calc(-1 * var(--header-h));
+  margin-top: calc(-1 * (var(--header-h) + var(--topbar-h)));
   min-height: min(100svh, 1000px);
   display: grid; place-items: center;
   background: var(--oxblood); color: var(--ivory);
@@ -165,7 +172,7 @@ em { font-style: normal; }
 }
 .hero__inner {
   width: 100%; display: grid; justify-items: center; text-align: center;
-  padding: calc(var(--header-h) + 28px) var(--gutter) 72px;
+  padding: calc(var(--topbar-h) + var(--header-h) + 28px) var(--gutter) 72px;
 }
 .hero__kicker {
   display: flex; align-items: center; gap: 16px; direction: ltr;
@@ -587,7 +594,8 @@ em { font-style: normal; }
   .hero { min-height: 0; }
   .hero { --bottle-h: clamp(330px, 50vh, 440px); }
   .hero__bottle { width: 84vw; }
-  .hero__inner { padding: calc(var(--header-h) + 36px) var(--gutter) 88px; }
+  .hero__inner { padding: calc(var(--topbar-h) + var(--header-h) + 36px) var(--gutter) 88px; }
+  .topbar__track { font-size: .8rem; }
   .arch { aspect-ratio: 5 / 6; }
   .arch__stage img { width: 26%; }
   .arch__stage img:nth-child(2), .arch__stage img:nth-child(3) { width: 31%; }

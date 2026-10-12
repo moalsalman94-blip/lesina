@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
   <script>document.documentElement.classList.add("js");</script>
   <script type="importmap">
     { "imports": {
@@ -34,9 +34,11 @@
   <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursorLabel"></span></div>
 
   <div class="topbar">
-    <span>توصيل مجاني لكل الطلبات</span>
-    <span class="topbar__dot" aria-hidden="true"></span>
-    <span>الدفع عند الاستلام</span>
+    <div class="topbar__track" id="topbarTrack">
+      <p class="is-active"><i aria-hidden="true">✦</i>توصيل مجاني لكل الطلبات<i aria-hidden="true">✦</i></p>
+      <p><i aria-hidden="true">✦</i>الدفع عند الاستلام<i aria-hidden="true">✦</i></p>
+      <p><i aria-hidden="true">✦</i>بكج ليسينا الكامل بـ 25 دينار<i aria-hidden="true">✦</i></p>
+    </div>
   </div>
 
   <header class="header" id="header">
@@ -348,7 +350,7 @@
 
   <div class="toast" id="toast" role="status"></div>
 
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>

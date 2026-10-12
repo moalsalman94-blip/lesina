@@ -370,6 +370,22 @@ function startSilk() {
   }).observe(canvas);
 }
 
+/* ---------- Top bar: one message at a time ---------- */
+function rotateTopbar() {
+  const items = $$("#topbarTrack p");
+  if (items.length < 2 || reducedMotion) return;
+  let i = 0;
+  setInterval(() => {
+    const prev = items[i];
+    i = (i + 1) % items.length;
+    prev.classList.remove("is-active");
+    prev.classList.add("is-leaving");
+    items[i].classList.remove("is-leaving");
+    items[i].classList.add("is-active");
+    setTimeout(() => prev.classList.remove("is-leaving"), 700);
+  }, 3600);
+}
+
 /* ---------- Init ---------- */
 function init() {
   applyScentTheme(currentScent);
@@ -378,6 +394,7 @@ function init() {
   renderCart();
   $("#year").textContent = new Date().getFullYear();
   startSilk();
+  rotateTopbar();
   // fx.js lifts the intro; this only matters if it failed to load
   setTimeout(() => { document.documentElement.classList.add("is-loaded"); $("#loader")?.classList.add("is-done"); }, 6000);
 
