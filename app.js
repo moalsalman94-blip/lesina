@@ -25,7 +25,9 @@ const BUNDLE_ITEMS = [
   { key: "body-butter", name: "زبدة الجسم", en: "Body Butter", desc: "زبدة الشيا والكاكاو لترطيب عميق وطويل الأمد، ومرونة بتحسّيها.", tag: "زبدة الشيا والكاكاو" },
   { key: "body-splash", name: "بودي سبلاش", en: "Body Splash", desc: "رشّة أخيرة بتعطي انتعاش فوري، وبتحسّن مظهر البشرة وإشراقتها.", tag: "فيتامين E و B5" },
 ];
-const imageFor = (itemKey, scent) => `images/${itemKey}-${scent}.svg`;
+// زيدي الرقم لما تغيري الصور، عشان المتصفحات ما تعرض النسخة القديمة المحفوظة عندها
+const ASSET_VERSION = 5;
+const imageFor = (itemKey, scent) => `images/${itemKey}-${scent}.svg?v=${ASSET_VERSION}`;
 // ترتيب المنتجات في العرض (الطوال بالنص)
 const STAGE_ORDER = ["body-scrub", "body-splash", "shower-gel", "body-butter"];
 
