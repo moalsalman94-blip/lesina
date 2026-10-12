@@ -6,7 +6,7 @@
 const CONFIG = {
   currency: "JD",
   // WhatsApp number that receives orders, international format without "+"
-  whatsappNumber: "962790335444",
+  whatsappNumber: "962782227760",
   // Delivery fee in JD. null = confirmed on WhatsApp, 0 = free
   deliveryFee: 0,
 };
