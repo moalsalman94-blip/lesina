@@ -153,14 +153,20 @@
     });
   });
 
-  // the arch floats against the page
-  gsap.fromTo(".arch__stage", { yPercent: 8 }, {
-    yPercent: -6, ease: "none",
-    scrollTrigger: { trigger: ".collection", start: "top bottom", end: "bottom top", scrub: true },
+  // the hero lineup drifts slower than the page
+  gsap.to(".hero__media img", {
+    yPercent: 12, scale: 1.04, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
   });
-  gsap.from(".arch", {
+
+  // the campaign poster opens like an arch, then floats
+  gsap.from(".feature__media", {
     clipPath: "inset(100% 0% 0% 0% round 999px 999px 4px 4px)", duration: 1.6, ease: "expo.inOut",
-    scrollTrigger: { trigger: ".arch", start: "top 80%" },
+    scrollTrigger: { trigger: ".feature__media", start: "top 80%" },
+  });
+  gsap.fromTo(".feature__media img", { yPercent: -6 }, {
+    yPercent: 6, ease: "none",
+    scrollTrigger: { trigger: ".feature", start: "top bottom", end: "bottom top", scrub: true },
   });
 
   // ritual: a horizontal gallery on large screens
@@ -171,7 +177,7 @@
     section.classList.add("is-h");
     const distance = () => track.scrollWidth - track.clientWidth;
     const tween = gsap.to(track, {
-      x: () => distance(), // RTL: content continues to the left, so move right
+      x: () => -distance(),
       ease: "none",
       scrollTrigger: {
         trigger: section, start: "top top", end: () => `+=${distance()}`,
@@ -181,24 +187,10 @@
     return () => { tween.scrollTrigger?.kill(); section.classList.remove("is-h"); };
   });
 
-  // ingredient icons draw themselves
-  $$(".ingredient svg").forEach((svg) => {
-    const parts = $$("path, ellipse", svg);
-    parts.forEach((p) => {
-      const len = p.getTotalLength ? p.getTotalLength() : 300;
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
-    });
-    gsap.to(parts, {
-      strokeDashoffset: 0, duration: 2, ease: "power2.inOut", stagger: 0.15,
-      scrollTrigger: { trigger: svg, start: "top 85%" },
-    });
-  });
-
-  // gift script breathes in
-  gsap.fromTo("#giftScript", { scale: 0.86, letterSpacing: "0.04em" }, {
-    scale: 1, letterSpacing: "-0.02em", ease: "none",
-    scrollTrigger: { trigger: ".gift", start: "top bottom", end: "center center", scrub: true },
+  // ingredient numerals draw a hairline as they arrive
+  gsap.from(".ingredient", {
+    "--rule": 0, duration: 1.4, ease: "expo.out", stagger: 0.08,
+    scrollTrigger: { trigger: ".ingredients__grid", start: "top 80%" },
   });
 
   // footer wordmark letters rise from the floor

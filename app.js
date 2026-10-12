@@ -1,40 +1,94 @@
 /* =========================================================
-   Lesina Cosmetics — store logic
-   لتعديل الأسعار أو الصور أو الروايح: عدّلي CONFIG و SCENTS و BUNDLE_ITEMS و PRODUCTS فقط
+   Revira Hair Care — store logic
+   Edit prices, copy and images in CONFIG / PRODUCTS / INGREDIENTS only.
    ========================================================= */
 
 const CONFIG = {
-  currency: "د.أ",
-  // رقم واتساب لاستقبال الطلبات بصيغة دولية بدون +
+  currency: "JD",
+  // WhatsApp number that receives orders, international format without "+"
   whatsappNumber: "962790335444",
-  // رسوم التوصيل بالدينار. null = تُحدَّد عند تأكيد الطلب، 0 = مجاني
+  // Delivery fee in JD. null = confirmed on WhatsApp, 0 = free
   deliveryFee: 0,
 };
 
-// الروايح المتوفرة وألوان كل وحدة (deep/mid للخلفيات الغامقة، tint للخلفيات الفاتحة)
-const SCENTS = {
-  aster: { name: "Aster", numeral: "I", edition: "الإصدار الأحمر", deep: "#4f0c1d", mid: "#b51f3e", tint: "#f2dfdf" },
-  lily: { name: "Lily", numeral: "II", edition: "الإصدار الذهبي", deep: "#4a3210", mid: "#b5862e", tint: "#f3e9d6" },
-  camellia: { name: "Camellia", numeral: "III", edition: "الإصدار الأخضر", deep: "#223010", mid: "#5f7a2c", tint: "#e5ead9" },
-};
+// Bump when images change so browsers fetch the new files
+const ASSET_VERSION = 10;
+const asset = (path) => `${path}?v=${ASSET_VERSION}`;
 
-// محتويات البكج بترتيب الاستعمال. الصورة لكل ريحة: images/<key>-<scent>.svg
-const BUNDLE_ITEMS = [
-  { key: "shower-gel", name: "شاور جل", en: "Shower Gel", desc: "رغوة ناعمة بترطّب البشرة وبتنعّمها، أول خطوة بالروتين.", tag: "فيتامين E و B5" },
-  { key: "body-scrub", name: "سكرب الجسم", en: "Body Scrub", desc: "بيزيل الخلايا الميتة وبينقّي البشرة، وبيحضّرها لامتصاص أعمق للترطيب.", tag: "فيتامين E" },
-  { key: "body-butter", name: "زبدة الجسم", en: "Body Butter", desc: "زبدة الشيا والكاكاو لترطيب عميق وطويل الأمد، ومرونة بتحسّيها.", tag: "زبدة الشيا والكاكاو" },
-  { key: "body-splash", name: "بودي سبلاش", en: "Body Splash", desc: "رشّة أخيرة بتعطي انتعاش فوري، وبتحسّن مظهر البشرة وإشراقتها.", tag: "فيتامين E و B5" },
-];
-// زيدي الرقم لما تغيري الصور، عشان المتصفحات ما تعرض النسخة القديمة المحفوظة عندها
-const ASSET_VERSION = 6;
-const imageFor = (itemKey, scent) => `images/${itemKey}-${scent}.svg?v=${ASSET_VERSION}`;
-// ترتيب المنتجات في العرض (الطوال بالنص)
-const STAGE_ORDER = ["body-scrub", "body-splash", "shower-gel", "body-butter"];
-
-// المنتجات القابلة للشراء
+// In ritual order: cleanse → condition → treat → finish
 const PRODUCTS = {
-  bundle: { id: "bundle", name: "بكج ليسينا الكامل", price: 25, coverItem: "body-splash" },
+  shampoo: {
+    name: "Shampoo", size: "500 ml", price: 15, step: "Cleanse",
+    image: "img/shampoo.webp", sheet: "img/sheet-shampoo.webp",
+    tagline: "The first step to perfect care.",
+    short: "Cleanses the scalp deeply without drying, and strengthens from the roots.",
+    benefits: [
+      "Deeply cleanses the scalp, removing dirt and excess oil without drying",
+      "Strengthens hair from the roots for fuller-looking hair",
+      "Hydrates and leaves hair naturally soft",
+      "Helps protect against breakage and split ends",
+    ],
+    ingredients: ["Vitamin B5 (Panthenol)", "Vitamin E", "Hydrolyzed Wheat Protein", "Glycerin", "Natural extracts", "Plant-based cleansers"],
+  },
+  conditioner: {
+    name: "Conditioner", size: "500 ml", price: 12, step: "Condition",
+    image: "img/conditioner.webp", sheet: "img/sheet-conditioner.webp",
+    tagline: "Lasting softness, renewed protection.",
+    short: "Detangles with ease and leaves hair silky, soft and easy to style.",
+    benefits: [
+      "Detangles easily for softer, more manageable hair",
+      "Deep hydration that lasts all day",
+      "Improves strength and elasticity, reducing breakage",
+      "Helps shield hair from heat and pollution",
+    ],
+    ingredients: ["Shea Butter", "Coconut Oil", "Polyglutamic Acid", "Hydrolyzed Wheat Protein", "Vitamin B5", "Vitamin E"],
+  },
+  "hair-mask": {
+    name: "Hair Mask", size: "250 ml", price: 10, step: "Treat",
+    image: "img/hair-mask.webp", sheet: "img/sheet-hair-mask.webp",
+    tagline: "Intensive treatment, stunning results.",
+    short: "A rich treatment for dry and damaged hair, for softness and shine.",
+    benefits: [
+      "Deep nourishment that revives every strand",
+      "Repairs and strengthens damaged hair from root to tip",
+      "Silky softness and a healthy shine",
+      "Suits all hair types",
+    ],
+    ingredients: ["Olive Oil", "Shea Butter", "Argan Oil", "Coconut Oil", "Vitamin E"],
+  },
+  "hair-oil": {
+    name: "Hair Oil", size: "250 ml", price: 20, step: "Finish",
+    image: "img/hair-oil.webp", sheet: "img/sheet-hair-oil.webp",
+    tagline: "A natural touch, exceptional benefits.",
+    short: "A blend of eight natural oils that nourishes the roots and adds shine.",
+    benefits: [
+      "Nourishes and strengthens hair from the roots",
+      "Cares for the scalp and supports healthy hair",
+      "Moisturises and helps prevent split ends",
+      "Natural shine and protection",
+    ],
+    ingredients: ["Sunflower Oil", "Almond Oil", "Coconut Oil", "Castor Oil", "Jojoba Oil", "Sesame Oil", "Lavender Oil", "Amla Oil", "Vitamin E"],
+  },
 };
+const ORDER = Object.keys(PRODUCTS);
+
+const RITUAL_COPY = {
+  shampoo: "Massage into wet hair and scalp, then rinse. A gentle, plant-based lather that cleans without stripping natural oils.",
+  conditioner: "Smooth through the lengths and ends, leave for a moment, then rinse. Detangles and seals in moisture.",
+  "hair-mask": "When hair needs more, apply after cleansing, leave to work, then rinse for intensive nourishment.",
+  "hair-oil": "Warm a few drops between your palms and work through the ends, or massage into the scalp.",
+};
+
+const INGREDIENTS = [
+  { name: "Vitamin B5", note: "Panthenol", desc: "Hydrates, strengthens and improves elasticity.", in: ["shampoo", "conditioner"] },
+  { name: "Vitamin E", note: "Antioxidant", desc: "Protects and nourishes hair.", in: ["shampoo", "conditioner", "hair-mask", "hair-oil"] },
+  { name: "Wheat Protein", note: "Hydrolyzed", desc: "Strengthens hair fibres and reduces breakage.", in: ["shampoo", "conditioner"] },
+  { name: "Shea Butter", note: "Butter", desc: "Deep nourishment for dry lengths.", in: ["conditioner", "hair-mask"] },
+  { name: "Coconut Oil", note: "Oil", desc: "Moisture and natural shine.", in: ["conditioner", "hair-mask", "hair-oil"] },
+  { name: "Argan Oil", note: "Oil", desc: "Natural nourishment for stronger, healthier hair.", in: ["hair-mask"] },
+  { name: "Olive Oil", note: "Oil", desc: "Softens and nourishes, straight from the grove.", in: ["hair-mask"] },
+  { name: "Jojoba Oil", note: "Oil", desc: "Moisturises and balances the scalp's natural oils.", in: ["hair-oil"] },
+];
 
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -43,22 +97,16 @@ const money = (n) => `${Number(n.toFixed(2))} ${CONFIG.currency}`;
 const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const pad = (n) => String(n).padStart(2, "0");
+const setTotal = () => ORDER.reduce((sum, id) => sum + PRODUCTS[id].price, 0);
 
-/* ---------- State ---------- */
-// cart lines are keyed "<productId>:<scent>"
-const STORAGE_KEY = "lesina_cart_v2";
-let currentScent = "aster";
+/* ---------- Bag state ---------- */
+const STORAGE_KEY = "revira_bag_v1";
 let cart = loadCart();
-
-const parseKey = (key) => { const [id, scent] = key.split(":"); return { id, scent, product: PRODUCTS[id] }; };
 
 function loadCart() {
   try {
     const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    return Object.fromEntries(Object.entries(data).filter(([key, q]) => {
-      const { product, scent } = parseKey(key);
-      return product && SCENTS[scent] && Number.isInteger(q) && q > 0;
-    }));
+    return Object.fromEntries(Object.entries(data).filter(([id, q]) => PRODUCTS[id] && Number.isInteger(q) && q > 0));
   } catch {
     return {};
   }
@@ -68,158 +116,121 @@ function saveCart() {
 }
 
 const cartCount = () => Object.values(cart).reduce((a, b) => a + b, 0);
-const cartSubtotal = () => Object.entries(cart).reduce((sum, [key, q]) => sum + parseKey(key).product.price * q, 0);
+const cartSubtotal = () => Object.entries(cart).reduce((sum, [id, q]) => sum + PRODUCTS[id].price * q, 0);
 const cartTotal = () => cartSubtotal() + (CONFIG.deliveryFee || 0);
 
-function addToCart(id, scent, qty = 1) {
-  if (!PRODUCTS[id] || !SCENTS[scent]) return;
-  const key = `${id}:${scent}`;
-  cart[key] = Math.min(20, (cart[key] || 0) + qty);
+function addToCart(id, qty = 1, { quiet = false } = {}) {
+  if (!PRODUCTS[id]) return;
+  cart[id] = Math.min(20, (cart[id] || 0) + qty);
   saveCart();
   renderCart();
   const btn = $("#cartOpen");
   btn.classList.remove("bump"); void btn.offsetWidth; btn.classList.add("bump");
-  toast(`انضاف ${PRODUCTS[id].name} · ${SCENTS[scent].name} للحقيبة`);
+  if (!quiet) toast(`${PRODUCTS[id].name} added to your bag`);
 }
-function setQty(key, qty) {
-  if (qty <= 0) delete cart[key];
-  else cart[key] = Math.min(20, qty);
+function setQty(id, qty) {
+  if (qty <= 0) delete cart[id];
+  else cart[id] = Math.min(20, qty);
   saveCart();
   renderCart();
 }
 
-/* ---------- Scent ---------- */
-function applyScentTheme(scent) {
-  const s = SCENTS[scent];
-  const root = document.documentElement.style;
-  root.setProperty("--s-deep", s.deep);
-  root.setProperty("--s-mid", s.mid);
-  root.setProperty("--s-tint", s.tint);
-}
-
-function stageImages(scent) {
-  return STAGE_ORDER.map((k) => {
-    const item = BUNDLE_ITEMS.find((i) => i.key === k);
-    return `<img data-item-img="${k}" src="${imageFor(k, scent)}" alt="${escapeHTML(item.name)}">`;
-  }).join("");
-}
-
-function setScent(scent) {
-  if (!SCENTS[scent] || scent === currentScent) return;
-  currentScent = scent;
-  applyScentTheme(scent);
-
-  $$("[data-scent]").forEach((b) => {
-    const on = b.dataset.scent === scent;
-    b.setAttribute("aria-selected", on);
-    if (b.classList.contains("tab")) b.tabIndex = on ? 0 : -1;
-  });
-  $("#scentName").textContent = SCENTS[scent].name;
-  $("#scentCaption").textContent = caption(scent);
-
-  // the arch cross-fades; everything else swaps in place
-  const stage = $("#archStage");
-  stage.classList.add("is-swapping");
-  setTimeout(() => {
-    $$("img", stage).forEach((img) => { img.src = imageFor(img.dataset.itemImg, scent); });
-    stage.classList.remove("is-swapping");
-  }, reducedMotion ? 0 : 380);
-  $$("[data-item-img]").forEach((img) => { if (!stage.contains(img)) img.src = imageFor(img.dataset.itemImg, scent); });
-}
-
-const caption = (scent) => `The ${SCENTS[scent].name} Edition · ${SCENTS[scent].edition}`;
-
 /* ---------- Rendering ---------- */
-function renderCollection() {
-  $("#archStage").innerHTML = stageImages(currentScent);
-  $("#scentCaption").textContent = caption(currentScent);
-
-  $("#scentTabs").innerHTML = Object.entries(SCENTS).map(([key, s]) => `
-    <button type="button" role="tab" class="tab" data-scent="${key}" aria-selected="${key === currentScent}"
-      tabindex="${key === currentScent ? 0 : -1}" style="--swatch:${s.mid}"><small>${s.numeral}.</small>${s.name}</button>`).join("");
-
-  $("#bundleContents").innerHTML = BUNDLE_ITEMS.map((i, n) => `
-    <li><span class="n">${pad(n + 1)}</span><span class="ar">${escapeHTML(i.name)}</span><span class="en">${i.en}</span></li>`).join("");
-
-  let qty = 1;
-  const qtyEl = $("#bundleQty span");
-  $("#bundleQty").addEventListener("click", (e) => {
-    const step = Number(e.target.dataset.step);
-    if (!step) return;
-    qty = Math.max(1, Math.min(20, qty + step));
-    qtyEl.textContent = qty;
-  });
-  $("#bundleAdd").addEventListener("click", () => {
-    addToCart("bundle", currentScent, qty);
-    qty = 1; qtyEl.textContent = 1;
-  });
-
-  // arrow keys move between scent tabs
-  $("#scentTabs").addEventListener("keydown", (e) => {
-    if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
-    const keys = Object.keys(SCENTS);
-    const i = keys.indexOf(currentScent);
-    const next = keys[(i + (e.key === "ArrowRight" ? 1 : -1) + keys.length) % keys.length];
-    setScent(next);
-    $(`[data-scent="${next}"]`).focus();
-  });
+function renderProducts() {
+  $("#products").innerHTML = ORDER.map((id, n) => {
+    const p = PRODUCTS[id];
+    return `
+      <article class="product reveal" data-id="${id}">
+        <button class="product__media" type="button" data-details="${id}" data-cursor="View" aria-label="View ${escapeHTML(p.name)} details">
+          <img src="${asset(p.image)}" alt="Revira ${escapeHTML(p.name)}" loading="lazy" width="760" height="760">
+          <span class="product__step">${pad(n + 1)} · ${p.step}</span>
+        </button>
+        <div class="product__body">
+          <div class="product__row">
+            <h3>${escapeHTML(p.name)}</h3>
+            <p class="product__price">${p.price} <span>${CONFIG.currency}</span></p>
+          </div>
+          <p class="product__size">${p.size}</p>
+          <p class="product__short">${escapeHTML(p.short)}</p>
+          <div class="product__actions">
+            <button class="btn btn--forest" type="button" data-add="${id}">Add to bag</button>
+            <button class="link-btn" type="button" data-details="${id}">Details</button>
+          </div>
+        </div>
+      </article>`;
+  }).join("");
+  $("#setPrice").textContent = setTotal();
 }
 
 function renderRitual() {
-  $("#ritualList").innerHTML = BUNDLE_ITEMS.map((i, n) => `
-    <article class="step reveal">
-      <div class="step__figure">
-        <img data-item-img="${i.key}" src="${imageFor(i.key, currentScent)}" alt="${escapeHTML(i.name)}" loading="lazy">
-      </div>
-      <div class="step__text">
-        <span class="step__num">${pad(n + 1)}</span>
-        <span class="step__en">${i.en}</span>
-        <h3>${escapeHTML(i.name)}</h3>
-        <p>${escapeHTML(i.desc)}</p>
-        <span class="step__tag">${escapeHTML(i.tag)}</span>
-      </div>
+  $("#ritualList").innerHTML = ORDER.map((id, n) => {
+    const p = PRODUCTS[id];
+    return `
+      <article class="step reveal">
+        <div class="step__figure">
+          <img src="${asset(p.image)}" alt="Revira ${escapeHTML(p.name)}" loading="lazy" width="760" height="760">
+        </div>
+        <div class="step__text">
+          <span class="step__num">${pad(n + 1)}</span>
+          <span class="step__en">${p.step}</span>
+          <h3>${escapeHTML(p.name)}</h3>
+          <p>${escapeHTML(RITUAL_COPY[id])}</p>
+          <button class="step__tag" type="button" data-add="${id}">Add · ${p.price} ${CONFIG.currency}</button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function renderIngredients() {
+  $("#ingredientList").innerHTML = INGREDIENTS.map((ing, n) => `
+    <article class="ingredient reveal">
+      <span class="ingredient__n">${pad(n + 1)}</span>
+      <p class="ingredient__note">${escapeHTML(ing.note)}</p>
+      <h3>${escapeHTML(ing.name)}</h3>
+      <p class="ingredient__desc">${escapeHTML(ing.desc)}</p>
+      <p class="ingredient__in">In ${ing.in.map((id) => PRODUCTS[id].name).join(", ")}</p>
     </article>`).join("");
 }
 
 function deliveryLabel() {
-  if (CONFIG.deliveryFee === null) return "يُحدَّد عند التأكيد";
-  return CONFIG.deliveryFee === 0 ? "مجاني" : money(CONFIG.deliveryFee);
+  if (CONFIG.deliveryFee === null) return "Confirmed on WhatsApp";
+  return CONFIG.deliveryFee === 0 ? "Free" : money(CONFIG.deliveryFee);
 }
 
 function renderCart() {
   const count = cartCount();
   $("#cartCount").textContent = count;
   $("#drawerCount").textContent = count ? `(${count})` : "";
-  const keys = Object.keys(cart);
+  const ids = ORDER.filter((id) => cart[id]);
   const body = $("#cartItems");
 
-  if (!keys.length) {
+  if (!ids.length) {
     body.innerHTML = `
       <div class="empty">
-        <p class="empty__word" dir="ltr">Lesina</p>
-        <p>حقيبتك فاضية لسا</p>
-        <button class="btn btn--wine" data-add-current>أضيفي البكج</button>
+        <p class="empty__word">revira</p>
+        <p>Your bag is empty</p>
+        <a class="btn btn--forest" href="#shop" data-close-bag>Shop the collection</a>
       </div>`;
     $("#cartFoot").hidden = true;
     return;
   }
 
   $("#cartFoot").hidden = false;
-  body.innerHTML = keys.map((key) => {
-    const { product, scent } = parseKey(key);
+  body.innerHTML = ids.map((id) => {
+    const p = PRODUCTS[id];
     return `
-      <div class="cart-item" data-key="${key}">
-        <div class="cart-item__img" style="--tint:${SCENTS[scent].tint}"><img src="${imageFor(product.coverItem, scent)}" alt=""></div>
+      <div class="cart-item" data-key="${id}">
+        <div class="cart-item__img"><img src="${asset(p.image)}" alt=""></div>
         <div>
-          <h4>${escapeHTML(product.name)}</h4>
-          <div class="meta"><b dir="ltr">${SCENTS[scent].name}</b> · ${money(product.price)}</div>
+          <h4>${escapeHTML(p.name)}</h4>
+          <div class="meta">${p.size} · ${money(p.price)}</div>
           <div class="qty qty--sm">
-            <button type="button" data-cart-step="1" aria-label="زيادة">+</button>
-            <span>${cart[key]}</span>
-            <button type="button" data-cart-step="-1" aria-label="إنقاص">−</button>
+            <button type="button" data-cart-step="-1" aria-label="Decrease">−</button>
+            <span>${cart[id]}</span>
+            <button type="button" data-cart-step="1" aria-label="Increase">+</button>
           </div>
         </div>
-        <button class="remove" type="button" data-remove>إزالة</button>
+        <button class="remove" type="button" data-remove>Remove</button>
       </div>`;
   }).join("");
 
@@ -228,17 +239,15 @@ function renderCart() {
   $("#cartTotal").textContent = money(cartTotal());
 }
 
-const lineLabel = (key) => { const { product, scent } = parseKey(key); return `${product.name} (${SCENTS[scent].name})`; };
-
 function renderSummary() {
-  const lines = Object.entries(cart).map(([key, q]) =>
-    `<div class="row"><span>${escapeHTML(lineLabel(key))} × ${q}</span><span>${money(parseKey(key).product.price * q)}</span></div>`
+  const lines = ORDER.filter((id) => cart[id]).map((id) =>
+    `<div class="row"><span>${escapeHTML(PRODUCTS[id].name)} × ${cart[id]}</span><span>${money(PRODUCTS[id].price * cart[id])}</span></div>`
   ).join("");
   $("#orderSummary").innerHTML = `${lines}
-    <div class="row total"><span>الإجمالي</span><span>${money(cartTotal())}</span></div>`;
+    <div class="row total"><span>Total</span><span>${money(cartTotal())}</span></div>`;
 }
 
-/* ---------- Drawer / modal ---------- */
+/* ---------- Overlays ---------- */
 function openCart() {
   $("#drawer").classList.add("is-open");
   $("#overlay").classList.add("is-open");
@@ -249,17 +258,42 @@ function closeCart() {
   $("#overlay").classList.remove("is-open");
   $("#drawer").setAttribute("aria-hidden", "true");
 }
-function openModal() {
+function openModal(el) {
+  el.classList.add("is-open");
+  el.setAttribute("aria-hidden", "false");
+}
+function closeModal(el) {
+  el.classList.remove("is-open");
+  el.setAttribute("aria-hidden", "true");
+}
+
+let detailsId = null, detailsQty = 1;
+function openDetails(id) {
+  const p = PRODUCTS[id];
+  if (!p) return;
+  detailsId = id;
+  detailsQty = 1;
+  $("#detailsImg").src = asset(p.image);
+  $("#detailsImg").alt = `Revira ${p.name}`;
+  $("#detailsSize").textContent = `${p.step} · ${p.size}`;
+  $("#detailsName").textContent = p.name;
+  $("#detailsTagline").textContent = p.tagline;
+  $("#detailsBenefits").innerHTML = p.benefits.map((b) => `<li>${escapeHTML(b)}</li>`).join("");
+  $("#detailsIngredients").innerHTML = p.ingredients.map((i) => `<li>${escapeHTML(i)}</li>`).join("");
+  $("#detailsPrice").textContent = p.price;
+  $("#detailsQty span").textContent = 1;
+  $("#detailsSheet").src = asset(p.sheet);
+  $("#detailsSheet").alt = `What's inside Revira ${p.name}`;
+  $("#details .modal__box").scrollTop = 0;
+  openModal($("#details"));
+}
+
+function openCheckout() {
   if (!cartCount()) return;
   renderSummary();
   $("#checkoutView").hidden = false;
   $("#successView").hidden = true;
-  $("#modal").classList.add("is-open");
-  $("#modal").setAttribute("aria-hidden", "false");
-}
-function closeModal() {
-  $("#modal").classList.remove("is-open");
-  $("#modal").setAttribute("aria-hidden", "true");
+  openModal($("#modal"));
 }
 
 let toastTimer;
@@ -285,21 +319,21 @@ function handleCheckout(e) {
     f.classList.toggle("invalid", !ok);
     if (!ok) valid = false;
   });
-  if (!valid) { toast("عبّي الحقول المعلّمة، ورقم الهاتف بصيغة 07XXXXXXXX"); return; }
+  if (!valid) { toast("Please fill in the highlighted fields. Phone format: 07XXXXXXXX"); return; }
 
-  const lines = Object.entries(cart).map(([key, q]) => `• ${lineLabel(key)} × ${q} = ${money(parseKey(key).product.price * q)}`);
+  const lines = ORDER.filter((id) => cart[id]).map((id) => `• ${PRODUCTS[id].name} (${PRODUCTS[id].size}) × ${cart[id]} = ${money(PRODUCTS[id].price * cart[id])}`);
   const message = [
-    "طلب جديد من متجر Lesina",
+    "New order from the Revira website",
     "",
     ...lines,
-    `التوصيل: ${deliveryLabel()}`,
-    `الإجمالي: ${money(cartTotal())}`,
+    `Delivery: ${deliveryLabel()}`,
+    `Total: ${money(cartTotal())}`,
     "",
-    `الاسم: ${data.name}`,
-    `الهاتف: ${data.phone}`,
-    `المدينة: ${data.city}`,
-    `العنوان: ${data.address}`,
-    data.notes ? `ملاحظات: ${data.notes}` : null,
+    `Name: ${data.name}`,
+    `Phone: ${data.phone}`,
+    `City: ${data.city}`,
+    `Address: ${data.address}`,
+    data.notes ? `Notes: ${data.notes}` : null,
   ].filter((l) => l !== null).join("\n");
 
   $("#whatsappLink").href = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -313,20 +347,20 @@ function handleCheckout(e) {
   $("#successView").hidden = false;
 }
 
-/* ---------- Hero: drifting silk, like the brand's abstract red posts ---------- */
-function startSilk() {
+/* ---------- Hero: dappled light through olive leaves ---------- */
+function startLight() {
   const canvas = $("#heroCanvas");
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   const blobs = [
-    { c: [181, 31, 62], r: .62, x: .78, y: .22, sx: .00011, sy: .00017, a: .9 },
-    { c: [122, 26, 54], r: .7, x: .18, y: .78, sx: .00013, sy: .00009, a: .95 },
-    { c: [224, 74, 99], r: .38, x: .62, y: .62, sx: .00019, sy: .00014, a: .55 },
-    { c: [94, 17, 41], r: .55, x: .3, y: .2, sx: .00008, sy: .00012, a: .9 },
-    { c: [233, 201, 204], r: .22, x: .5, y: .38, sx: .00016, sy: .0001, a: .18 },
+    { c: [92, 110, 58], r: .7, x: .2, y: .25, sx: .00011, sy: .00016, a: .9 },
+    { c: [61, 74, 38], r: .75, x: .82, y: .7, sx: .00013, sy: .00009, a: .95 },
+    { c: [184, 154, 90], r: .42, x: .7, y: .18, sx: .00018, sy: .00013, a: .45 },
+    { c: [120, 136, 78], r: .5, x: .45, y: .6, sx: .00009, sy: .00012, a: .6 },
+    { c: [243, 239, 228], r: .22, x: .3, y: .3, sx: .00016, sy: .0001, a: .14 },
   ];
   let w, h, running = true, raf;
-  const scale = .5; // draw at half resolution; the blur hides it
+  const scale = .5;
 
   function resize() {
     w = canvas.width = Math.max(1, Math.round(canvas.clientWidth * scale));
@@ -334,7 +368,7 @@ function startSilk() {
   }
   function draw(t) {
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "#2a0711";
+    ctx.fillStyle = "#1f2a14";
     ctx.fillRect(0, 0, w, h);
     ctx.globalCompositeOperation = "screen";
     const m = Math.max(w, h);
@@ -381,41 +415,66 @@ function rotateTopbar() {
 
 /* ---------- Init ---------- */
 function init() {
-  applyScentTheme(currentScent);
-  renderCollection();
+  renderProducts();
   renderRitual();
+  renderIngredients();
   renderCart();
   $("#year").textContent = new Date().getFullYear();
-  startSilk();
+  startLight();
   rotateTopbar();
   // fx.js lifts the intro; this only matters if it failed to load
   setTimeout(() => { document.documentElement.classList.add("is-loaded"); $("#loader")?.classList.add("is-done"); }, 6000);
 
   document.addEventListener("click", (e) => {
-    const scentBtn = e.target.closest("[data-scent]");
-    if (scentBtn) return setScent(scentBtn.dataset.scent);
-    if (e.target.closest("[data-add-current]")) addToCart("bundle", currentScent);
+    const add = e.target.closest("[data-add]");
+    if (add) return addToCart(add.dataset.add);
+    const details = e.target.closest("[data-details]");
+    if (details) return openDetails(details.dataset.details);
+    if (e.target.closest("[data-close-bag]")) closeCart();
+  });
+
+  $("#addSet").addEventListener("click", () => {
+    ORDER.forEach((id) => addToCart(id, 1, { quiet: true }));
+    toast("The complete ritual is in your bag");
+    openCart();
   });
 
   $("#cartItems").addEventListener("click", (e) => {
     const item = e.target.closest(".cart-item");
     if (!item) return;
-    const key = item.dataset.key;
-    if (e.target.closest("[data-remove]")) return setQty(key, 0);
+    const id = item.dataset.key;
+    if (e.target.closest("[data-remove]")) return setQty(id, 0);
     const step = Number(e.target.dataset.cartStep);
-    if (step) setQty(key, cart[key] + step);
+    if (step) setQty(id, cart[id] + step);
   });
+
+  // details modal
+  $("#detailsQty").addEventListener("click", (e) => {
+    const step = Number(e.target.dataset.step);
+    if (!step) return;
+    detailsQty = Math.max(1, Math.min(20, detailsQty + step));
+    $("#detailsQty span").textContent = detailsQty;
+  });
+  $("#detailsAdd").addEventListener("click", () => {
+    addToCart(detailsId, detailsQty);
+    closeModal($("#details"));
+  });
+  $$("#details [data-close]").forEach((b) => b.addEventListener("click", () => closeModal($("#details"))));
 
   $("#cartOpen").addEventListener("click", openCart);
   $("#cartClose").addEventListener("click", closeCart);
   $("#overlay").addEventListener("click", closeCart);
-  $("#checkoutBtn").addEventListener("click", openModal);
-  $("#modalClose").addEventListener("click", closeModal);
-  $("#successClose").addEventListener("click", closeModal);
-  $("#modal").addEventListener("click", (e) => { if (e.target.id === "modal") closeModal(); });
+  $("#checkoutBtn").addEventListener("click", openCheckout);
+  $("#modalClose").addEventListener("click", () => closeModal($("#modal")));
+  $("#successClose").addEventListener("click", () => closeModal($("#modal")));
+  $$(".modal").forEach((m) => m.addEventListener("click", (e) => { if (e.target === m) closeModal(m); }));
   $("#checkoutForm").addEventListener("submit", handleCheckout);
   $("#checkoutForm").addEventListener("input", (e) => e.target.classList.remove("invalid"));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closeCart(); } });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    $$(".modal.is-open").forEach(closeModal);
+    closeCart();
+  });
 
   // mobile menu
   const menuBtn = $("#menuBtn"), mobileNav = $("#mobileNav");
@@ -437,7 +496,7 @@ function init() {
   // reveal on scroll
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); } });
-  }, { threshold: .15, rootMargin: "0px 0px -6% 0px" });
+  }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
   $$(".reveal").forEach((el) => io.observe(el));
 }
 
