@@ -9,14 +9,29 @@
   <meta property="og:title" content="Lesina Cosmetics">
   <meta property="og:description" content="بكج العناية الكامل بأربع خطوات. 25 دينار مع توصيل مجاني والدفع عند الاستلام.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="favicon.svg?v=5" type="image/svg+xml">
+  <link rel="icon" href="favicon.svg?v=6" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=IBM+Plex+Sans+Arabic:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
   <script>document.documentElement.classList.add("js");</script>
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
 </head>
 <body>
+
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <p class="loader__word"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></p>
+      <p class="loader__sub">COSMETICS</p>
+      <span class="loader__line"><i id="loaderBar"></i></span>
+    </div>
+  </div>
+  <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursorLabel"></span></div>
 
   <div class="topbar">
     <span>توصيل مجاني لكل الطلبات</span>
@@ -60,13 +75,24 @@
       <div class="grain" aria-hidden="true"></div>
       <div class="hero__inner">
         <p class="hero__kicker"><span>Premium Body Care</span><i></i><span>Collection</span></p>
-        <h1 class="hero__word" aria-label="Lesina"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></h1>
-        <div class="hero__stage" id="heroStage"></div>
+        <div class="hero__visual">
+          <h1 class="hero__word" aria-label="Lesina"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></h1>
+          <div class="hero__bottle" data-cursor="حرّكي">
+            <canvas id="bottle" aria-label="عبوة ليسينا ثلاثية الأبعاد، اسحبي لتدويرها"></canvas>
+            <span class="hero__hint" aria-hidden="true">اسحبي لتدوير العبوة</span>
+          </div>
+          <div class="hero__stage" id="heroStage"></div>
+        </div>
         <div class="hero__foot">
           <p class="hero__lead">طقس العناية الكامل، <em>بأربع خطوات.</em></p>
           <div class="hero__cta">
-            <a href="#collection" class="btn btn--ivory">اكتشفي البكج</a>
+            <a href="#collection" class="btn btn--ivory" data-magnetic>اكتشفي البكج</a>
             <span class="hero__price"><b>25</b> د.أ</span>
+          </div>
+          <div class="hero__scents" role="group" aria-label="اختاري الريحة" dir="ltr">
+            <button type="button" class="chip" data-scent="aster" aria-selected="true" style="--swatch:#b51f3e">Aster</button>
+            <button type="button" class="chip" data-scent="lily" aria-selected="false" style="--swatch:#c99a3b">Lily</button>
+            <button type="button" class="chip" data-scent="camellia" aria-selected="false" style="--swatch:#5f7a2c">Camellia</button>
           </div>
         </div>
       </div>
@@ -85,8 +111,8 @@
     <section class="manifesto" id="manifesto">
       <div class="wrap manifesto__inner">
         <p class="label reveal">Lesina</p>
-        <p class="manifesto__text reveal">كل خطوة بروتينك إلها دور. من رغوة الشاور جل لآخر رشّة سبلاش، أربع منتجات بتكمّل بعض، بمكونات مختارة بعناية، <em>لتجربة فخامة كل يوم.</em></p>
-        <dl class="stats reveal">
+        <p class="manifesto__text" data-scrub-words>كل خطوة بروتينك إلها دور. من رغوة الشاور جل لآخر رشّة سبلاش، أربع منتجات بتكمّل بعض، بمكونات مختارة بعناية، <em>لتجربة فخامة كل يوم.</em></p>
+        <dl class="stats reveal" id="stats">
           <div><dt>منتجات بالبكج</dt><dd>4</dd></div>
           <div><dt>روايح للاختيار</dt><dd>3</dd></div>
           <div><dt>دينار، مع توصيل مجاني</dt><dd>25</dd></div>
@@ -121,7 +147,7 @@
               <button type="button" data-step="-1" aria-label="إنقاص">−</button>
             </div>
           </div>
-          <button class="btn btn--wine btn--block" id="bundleAdd">أضيفي للحقيبة</button>
+          <button class="btn btn--wine btn--block" id="bundleAdd" data-magnetic>أضيفي للحقيبة</button>
           <ul class="perks">
             <li>توصيل مجاني</li>
             <li>الدفع عند الاستلام</li>
@@ -136,7 +162,7 @@
       <div class="wrap">
         <header class="section-head reveal">
           <p class="label">الطقس</p>
-          <h2>روتينك <em>بأربع خطوات</em></h2>
+          <h2 data-split>روتينك <em>بأربع خطوات</em></h2>
         </header>
         <div class="ritual__list" id="ritualList"></div>
       </div>
@@ -148,7 +174,7 @@
       <div class="wrap">
         <header class="section-head section-head--light reveal">
           <p class="label">المكونات</p>
-          <h2>من قلب <em>الطبيعة</em></h2>
+          <h2 data-split>من قلب <em>الطبيعة</em></h2>
         </header>
         <div class="ingredients__grid">
           <article class="ingredient reveal">
@@ -176,10 +202,10 @@
     <!-- GIFT / CTA -->
     <section class="gift">
       <div class="wrap gift__inner reveal">
-        <p class="gift__script" dir="ltr">Glow with love</p>
-        <h2>هدية بتليق <em>بمين بتحبي</em></h2>
+        <p class="gift__script" dir="ltr" id="giftScript">Glow with love</p>
+        <h2 data-split>هدية بتليق <em>بمين بتحبي</em></h2>
         <p class="gift__text">أو هدية إلك. البكج الكامل بـ 25 دينار، والتوصيل علينا.</p>
-        <button class="btn btn--wine" data-add-current>أضيفي للحقيبة</button>
+        <button class="btn btn--wine" data-add-current data-magnetic>أضيفي للحقيبة</button>
       </div>
     </section>
 
@@ -197,7 +223,7 @@
       <div class="wrap faq-wrap">
         <header class="section-head section-head--start reveal">
           <p class="label">أسئلة شائعة</p>
-          <h2>كل اللي <em>بدك تعرفيه</em></h2>
+          <h2 data-split>كل اللي <em>بدك تعرفيه</em></h2>
         </header>
         <div class="faq reveal">
           <details>
@@ -248,7 +274,7 @@
           <p dir="ltr">Experience the luxury of premium body care.</p>
         </div>
       </div>
-      <p class="footer__word" aria-hidden="true">Lesina</p>
+      <p class="footer__word" aria-hidden="true" id="footerWord"><span>L</span><span>e</span><span>s</span><span>i</span><span>n</span><span>a</span></p>
       <div class="footer__base">
         <small>© <span id="year"></span> Lesina Cosmetics</small>
         <small>توصيل مجاني · الدفع عند الاستلام</small>
@@ -263,7 +289,7 @@
       <h3>الحقيبة <span id="drawerCount"></span></h3>
       <button class="icon-btn" id="cartClose" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
-    <div class="drawer__body" id="cartItems"></div>
+    <div class="drawer__body" id="cartItems" data-lenis-prevent></div>
     <div class="drawer__foot" id="cartFoot">
       <div class="row"><span>المجموع</span><span id="cartSubtotal">0 د.أ</span></div>
       <div class="row"><span>التوصيل</span><span id="cartDelivery"></span></div>
@@ -275,7 +301,7 @@
 
   <!-- CHECKOUT MODAL -->
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal__box" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
       <button class="icon-btn modal__close" id="modalClose" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       <div id="checkoutView">
         <p class="label">إتمام الطلب</p>
@@ -322,6 +348,11 @@
 
   <div class="toast" id="toast" role="status"></div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="fx.js?v=6" defer></script>
+  <script type="module" src="bottle.js?v=6"></script>
 </body>
 </html>
