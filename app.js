@@ -36,9 +36,6 @@ const PRODUCTS = {
   bundle: { id: "bundle", name: "بكج ليسينا الكامل", price: 25, coverItem: "body-splash" },
 };
 
-// shared with bottle.js / fx.js
-window.LESINA = { SCENTS, get scent() { return currentScent; } };
-
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -117,8 +114,6 @@ function setScent(scent) {
     b.setAttribute("aria-selected", on);
     if (b.classList.contains("tab")) b.tabIndex = on ? 0 : -1;
   });
-  // the 3D bottle (bottle.js) listens for this
-  document.dispatchEvent(new CustomEvent("lesina:scent", { detail: { scent, ...SCENTS[scent] } }));
   $("#scentName").textContent = SCENTS[scent].name;
   $("#scentCaption").textContent = caption(scent);
 
@@ -136,7 +131,6 @@ const caption = (scent) => `The ${SCENTS[scent].name} Edition · ${SCENTS[scent]
 
 /* ---------- Rendering ---------- */
 function renderCollection() {
-  $("#heroStage").innerHTML = stageImages(currentScent);
   $("#archStage").innerHTML = stageImages(currentScent);
   $("#scentCaption").textContent = caption(currentScent);
 
