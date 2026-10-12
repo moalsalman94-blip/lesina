@@ -241,7 +241,6 @@ function renderSummary() {
     `<div class="row"><span>${escapeHTML(lineLabel(key))} × ${q}</span><span>${money(parseKey(key).product.price * q)}</span></div>`
   ).join("");
   $("#orderSummary").innerHTML = `${lines}
-    <div class="row muted"><span>التوصيل</span><span>${deliveryLabel()}</span></div>
     <div class="row total"><span>الإجمالي</span><span>${money(cartTotal())}</span></div>`;
 }
 
